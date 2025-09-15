@@ -1,0 +1,72 @@
+{
+  "name": "RoadmapMilestone",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "education",
+        "skill",
+        "experience",
+        "certification",
+        "project"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "estimated_duration": {
+      "type": "string"
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "course",
+              "article",
+              "video",
+              "book",
+              "certification"
+            ]
+          }
+        }
+      }
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "points_reward": {
+      "type": "number"
+    },
+    "career_path": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "category"
+  ]
+}

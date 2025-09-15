@@ -1,0 +1,19 @@
+{
+  "name": "QuizResponse",
+  "type": "object",
+  "properties": {
+    "question_id": {
+      "type": "string"
+    },
+    "answer": {
+      "type": "string"
+    },
+    "points_earned": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "question_id",
+    "answer"
+  ]
+}

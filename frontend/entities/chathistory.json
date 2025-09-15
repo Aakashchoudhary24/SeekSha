@@ -1,0 +1,52 @@
+{
+  "name": "ChatHistory",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string"
+    },
+    "message_type": {
+      "type": "string",
+      "enum": [
+        "user",
+        "bot"
+      ]
+    },
+    "content": {
+      "type": "string"
+    },
+    "formatted_content": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "list",
+            "table",
+            "formatted"
+          ]
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "language": {
+      "type": "string",
+      "default": "english"
+    },
+    "is_saved": {
+      "type": "boolean",
+      "default": false
+    },
+    "linked_note_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "message_type",
+    "content"
+  ]
+}

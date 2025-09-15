@@ -1,0 +1,81 @@
+{
+  "name": "LearningModule",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "mathematics",
+        "science",
+        "commerce",
+        "arts",
+        "engineering",
+        "medical",
+        "law",
+        "management"
+      ]
+    },
+    "difficulty_level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ]
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "video",
+        "text",
+        "assessment",
+        "interactive",
+        "mixed"
+      ]
+    },
+    "duration_minutes": {
+      "type": "number"
+    },
+    "language": {
+      "type": "string",
+      "default": "english"
+    },
+    "downloadable": {
+      "type": "boolean",
+      "default": true
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "competencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "career_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "difficulty_level",
+    "content_type"
+  ]
+}

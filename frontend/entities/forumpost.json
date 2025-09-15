@@ -1,0 +1,50 @@
+{
+  "name": "ForumPost",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "general",
+        "career_guidance",
+        "college_admission",
+        "study_tips",
+        "peer_help",
+        "success_stories"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "upvotes": {
+      "type": "number",
+      "default": 0
+    },
+    "replies_count": {
+      "type": "number",
+      "default": 0
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_solved": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "content",
+    "category"
+  ]
+}
