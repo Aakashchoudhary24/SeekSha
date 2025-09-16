@@ -14,6 +14,9 @@ import {
   FileText,
   MessageCircle,
   Trophy,
+  Settings,
+  RefreshCw,
+  Sparkles,
   Lock,
   PersonStanding,
 } from "lucide-react";
@@ -38,21 +41,20 @@ const navigationItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [user, setUser] = useState<{ name: string; avatar: string; points: number }>({
-    name: "",
-    avatar: "",
+  const [user, setUser] = useState({
+    name: "Guest",
     points: 0,
+    avatar: "/placeholder.svg",
   });
 
   useEffect(() => {
-    // Load user from localStorage if exists
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      const parsed = JSON.parse(storedUser);
+      const parsedUser = JSON.parse(storedUser);
       setUser({
-        name: parsed.name || "User",
-        avatar: parsed.avatar || "/placeholder.svg",
-        points: 64, // you can replace with real points if you store it somewhere
+        name: parsedUser.name || "Guest",
+        avatar: parsedUser.avatar || "/placeholder.svg",
+        points: parsedUser.points || 0,
       });
     }
   }, []);
@@ -61,38 +63,69 @@ export function Sidebar() {
     <div className="w-64 h-screen bg-[#f5f3f0] border-r border-[#e5e1dc] flex flex-col">
       {/* Logo Section */}
       <div className="p-6 border-b border-[#e5e1dc]">
-        <h1 className="text-lg font-bold text-[#8b4513]">PathFinders</h1>
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-[#d4621a] rounded-full flex items-center justify-center">
+            <Sparkles className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-[#8b4513]">PathFinders</h1>
+            <p className="text-xs text-[#a0826d]">Enhanced Learning</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="p-4 border-b border-[#e5e1dc]">
+        <div className="flex space-x-2">
+          <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
+            <Home className="w-4 h-4 text-[#8b4513]" />
+          </button>
+          <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
+            <RefreshCw className="w-4 h-4 text-[#8b4513]" />
+          </button>
+          <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
+            <Brain className="w-4 h-4 text-[#8b4513]" />
+          </button>
+          <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
+            <Settings className="w-4 h-4 text-[#8b4513]" />
+          </button>
+        </div>
       </div>
 
       {/* Navigation */}
       <div className="flex-1 p-4">
-        <nav className="space-y-1">
-          {navigationItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                  isActive
-                    ? "bg-[#d4621a] text-white shadow-sm"
-                    : "text-[#8b4513] hover:bg-[#e5e1dc] hover:text-[#6b3410]"
-                )}
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.name}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="mb-4">
+          <h3 className="text-xs font-semibold text-[#a0826d] uppercase tracking-wider mb-3">
+            Navigation
+          </h3>
+          <nav className="space-y-1">
+            {navigationItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                    isActive
+                      ? "bg-[#d4621a] text-white shadow-sm"
+                      : "text-[#8b4513] hover:bg-[#e5e1dc] hover:text-[#6b3410]"
+                  )}
+                >
+                  <item.icon className="w-4 h-4" />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </div>
 
       {/* User Profile */}
       <div className="p-4 border-t border-[#e5e1dc]">
         <div className="flex items-center space-x-3">
           <Avatar className="w-10 h-10">
-            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+            <AvatarImage src={user.avatar} alt={user.name} />
             <AvatarFallback className="bg-[#d4621a] text-white">
               {user.name
                 .split(" ")
@@ -102,9 +135,11 @@ export function Sidebar() {
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-[#8b4513] truncate">{user.name}</p>
-            <Badge variant="secondary" className="bg-[#d4621a] text-white text-xs px-2 py-0">
-              {user.points} points
-            </Badge>
+            <div className="flex items-center space-x-1">
+              <Badge variant="secondary" className="bg-[#d4621a] text-white text-xs px-2 py-0">
+                {user.points} points
+              </Badge>
+            </div>
           </div>
         </div>
       </div>

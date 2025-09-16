@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { GraduationCap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signInWithGoogle } from "@/lib/firebase";
+import { Sidebar } from "@/components/sidebar";
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,20 +39,25 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      <div className="w-full max-w-md">
-        <Card className="bg-card border-border">
-          <CardHeader className="text-center">
-            <GraduationCap className="w-10 h-10 mx-auto text-primary mb-2" />
-            <CardTitle>Welcome</CardTitle>
-            <CardDescription>Sign in with Google to continue</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" onClick={handleGoogleLogin} disabled={isLoading}>
-              {isLoading ? "Loading..." : "Continue with Google"}
-            </Button>
-          </CardContent>
-        </Card>
+    <div className="flex min-h-screen bg-background">
+      <Sidebar />
+
+      {/* Main content */}
+      <div className="flex-1 flex items-center justify-center p-4">
+        <div className="w-full max-w-sm">
+          <Card className="bg-card border-border">
+            <CardHeader className="text-center">
+              <GraduationCap className="w-10 h-10 mx-auto text-primary mb-2" />
+              <CardTitle>Welcome</CardTitle>
+              <CardDescription>Sign in with Google to continue</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full" onClick={handleGoogleLogin} disabled={isLoading}>
+                {isLoading ? "Loading..." : "Continue with Google"}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

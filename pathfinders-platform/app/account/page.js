@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Sidebar } from "@/components/sidebar";
 
 export default function AccountsPage() {
   const [user, setUser] = useState(null);
@@ -31,30 +32,35 @@ export default function AccountsPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      <Card className="w-full max-w-md bg-card border-border">
-        <CardHeader className="text-center">
-          <Avatar className="w-20 h-20 mx-auto mb-4">
-            {user.avatar ? (
-              <AvatarImage src={user.avatar} alt={user.name} />
-            ) : (
-              <AvatarFallback className="bg-[#d4621a] text-white">
-                {user.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
-            )}
-          </Avatar>
-          <CardTitle className="text-2xl text-card-foreground">{user.name}</CardTitle>
-          <CardDescription className="text-sm text-muted-foreground">{user.email}</CardDescription>
-        </CardHeader>
-        <CardContent className="text-center">
-          <Button className="mt-4 w-full" onClick={handleLogout}>
-            Logout
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="flex min-h-screen bg-background">
+      <Sidebar />
+
+      {/* Main content */}
+      <div className="flex-1 flex items-center justify-center p-4">
+        <Card className="w-full max-w-sm bg-card border-border">
+          <CardHeader className="text-center">
+            <Avatar className="w-20 h-20 mx-auto mb-4">
+              {user.avatar ? (
+                <AvatarImage src={user.avatar} alt={user.name} />
+              ) : (
+                <AvatarFallback className="bg-[#d4621a] text-white">
+                  {user.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              )}
+            </Avatar>
+            <CardTitle className="text-2xl text-card-foreground">{user.name}</CardTitle>
+            <CardDescription className="text-sm text-muted-foreground">{user.email}</CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <Button className="mt-4 w-full" onClick={handleLogout}>
+              Logout
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
