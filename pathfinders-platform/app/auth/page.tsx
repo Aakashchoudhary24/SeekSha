@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { GraduationCap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signInWithGoogle } from "@/lib/firebase";
@@ -32,14 +38,16 @@ export default function AuthPage() {
       router.push("/account");
     } catch (err) {
       console.error("Google login error:", err);
-      alert("Google login failed. Make sure authorized domains include localhost:3000");
+      alert(
+        "Google login failed. Make sure authorized domains include localhost:3000"
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-[#f9e7d1]">
       <Sidebar />
 
       {/* Main content */}
@@ -52,7 +60,11 @@ export default function AuthPage() {
               <CardDescription>Sign in with Google to continue</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full" onClick={handleGoogleLogin} disabled={isLoading}>
+              <Button
+                className="w-full"
+                onClick={handleGoogleLogin}
+                disabled={isLoading}
+              >
                 {isLoading ? "Loading..." : "Continue with Google"}
               </Button>
             </CardContent>

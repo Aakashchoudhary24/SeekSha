@@ -1,30 +1,43 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Sidebar } from "@/components/sidebar"
-import { Card, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Plus, MessageCircle, Users, ChevronUp, Filter } from "lucide-react"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Sidebar } from "@/components/sidebar";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Search,
+  Plus,
+  MessageCircle,
+  Users,
+  ChevronUp,
+  Filter,
+} from "lucide-react";
 
 interface ForumPost {
-  id: string
-  title: string
-  content: string
+  id: string;
+  title: string;
+  content: string;
   author: {
-    name: string
-    avatar: string
-    initials: string
-  }
-  createdAt: string
-  commentsCount: number
-  upvotes: number
-  tags: string[]
-  category: string
+    name: string;
+    avatar: string;
+    initials: string;
+  };
+  createdAt: string;
+  commentsCount: number;
+  upvotes: number;
+  tags: string[];
+  category: string;
 }
 
 const mockPosts: ForumPost[] = [
@@ -60,23 +73,33 @@ const mockPosts: ForumPost[] = [
     tags: ["resume", "job", "FAANG", "help"],
     category: "Career",
   },
-]
+];
 
-const categories = ["All Categories", "Academic", "Career", "Technical", "General"]
+const categories = [
+  "All Categories",
+  "Academic",
+  "Career",
+  "Technical",
+  "General",
+];
 
 export default function CommunityPage() {
-  const [posts, setPosts] = useState<ForumPost[]>(mockPosts)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All Categories")
+  const [posts, setPosts] = useState<ForumPost[]>(mockPosts);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    const matchesCategory = selectedCategory === "All Categories" || post.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+      post.tags.some((tag) =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    const matchesCategory =
+      selectedCategory === "All Categories" ||
+      post.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const getTagColor = (tag: string) => {
     const colors = [
@@ -85,9 +108,9 @@ export default function CommunityPage() {
       "bg-purple-100 text-purple-700",
       "bg-orange-100 text-orange-700",
       "bg-pink-100 text-pink-700",
-    ]
-    return colors[tag.length % colors.length]
-  }
+    ];
+    return colors[tag.length % colors.length];
+  };
 
   return (
     <div className="flex min-h-screen bg-[#f5f3f0]">
@@ -108,8 +131,12 @@ export default function CommunityPage() {
                   <Users className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold text-[#8b4513]">Community Forum</h1>
-                  <p className="text-[#a0826d] text-lg">Connect, share, and learn with your peers.</p>
+                  <h1 className="text-4xl font-bold text-[#8b4513]">
+                    Community Forum
+                  </h1>
+                  <p className="text-[#a0826d] text-lg">
+                    Connect, share, and learn with your peers.
+                  </p>
                 </div>
               </div>
               <Button className="bg-[#d4621a] hover:bg-[#b8541a] text-white px-6 py-3 text-base">
@@ -137,7 +164,10 @@ export default function CommunityPage() {
                 />
               </div>
               <div className="flex gap-4 items-center">
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <Select
+                  value={selectedCategory}
+                  onValueChange={setSelectedCategory}
+                >
                   <SelectTrigger className="w-48 h-12 border-[#e5e1dc] focus:border-[#d4621a] bg-white">
                     <Filter className="w-4 h-4 mr-2" />
                     <SelectValue />
@@ -175,7 +205,9 @@ export default function CommunityPage() {
                         >
                           <ChevronUp className="w-5 h-5" />
                         </Button>
-                        <span className="text-2xl font-bold text-[#8b4513]">{post.upvotes}</span>
+                        <span className="text-2xl font-bold text-[#8b4513]">
+                          {post.upvotes}
+                        </span>
                       </div>
 
                       {/* Post Content */}
@@ -186,13 +218,20 @@ export default function CommunityPage() {
                           </h2>
                         </div>
 
-                        <p className="text-[#6b5b73] leading-relaxed mb-4 line-clamp-3">{post.content}</p>
+                        <p className="text-[#6b5b73] leading-relaxed mb-4 line-clamp-3">
+                          {post.content}
+                        </p>
 
                         {/* Tags */}
                         {post.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2 mb-4">
                             {post.tags.map((tag) => (
-                              <Badge key={tag} className={`${getTagColor(tag)} text-xs font-medium`}>
+                              <Badge
+                                key={tag}
+                                className={`${getTagColor(
+                                  tag
+                                )} text-xs font-medium`}
+                              >
                                 {tag}
                               </Badge>
                             ))}
@@ -204,22 +243,31 @@ export default function CommunityPage() {
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2">
                               <Avatar className="w-6 h-6">
-                                <AvatarImage src={post.author.avatar || "/placeholder.svg"} />
+                                <AvatarImage
+                                  src={post.author.avatar || "/placeholder.svg"}
+                                />
                                 <AvatarFallback className="text-xs bg-[#d4621a] text-white">
                                   {post.author.initials}
                                 </AvatarFallback>
                               </Avatar>
                               <span className="text-sm text-[#a0826d]">
-                                Posted by <span className="font-medium">{post.author.name}</span>
+                                Posted by{" "}
+                                <span className="font-medium">
+                                  {post.author.name}
+                                </span>
                               </span>
                             </div>
-                            <span className="text-sm text-[#a0826d]">{post.createdAt}</span>
+                            <span className="text-sm text-[#a0826d]">
+                              {post.createdAt}
+                            </span>
                           </div>
 
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1 text-[#a0826d]">
                               <MessageCircle className="w-4 h-4" />
-                              <span className="text-sm">{post.commentsCount} Comments</span>
+                              <span className="text-sm">
+                                {post.commentsCount} Comments
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -235,8 +283,13 @@ export default function CommunityPage() {
           {filteredPosts.length === 0 && (
             <div className="text-center py-12">
               <Users className="w-16 h-16 text-[#a0826d] mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-[#8b4513] mb-2">No discussions found</h3>
-              <p className="text-[#a0826d] mb-4">Be the first to start a conversation or adjust your search criteria</p>
+              <h3 className="text-xl font-semibold text-[#8b4513] mb-2">
+                No discussions found
+              </h3>
+              <p className="text-[#a0826d] mb-4">
+                Be the first to start a conversation or adjust your search
+                criteria
+              </p>
               <Button className="bg-[#d4621a] hover:bg-[#b8541a] text-white">
                 <Plus className="w-4 h-4 mr-2" />
                 Create First Post
@@ -246,5 +299,5 @@ export default function CommunityPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }

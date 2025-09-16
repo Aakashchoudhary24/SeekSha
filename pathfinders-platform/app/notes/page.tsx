@@ -1,24 +1,45 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Sidebar } from "@/components/sidebar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Search, Edit, Trash2, Heart, User, Briefcase, BookOpen, Bot, Calendar } from "lucide-react"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Sidebar } from "@/components/sidebar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  Heart,
+  User,
+  Briefcase,
+  BookOpen,
+  Bot,
+  Calendar,
+} from "lucide-react";
 
 interface Note {
-  id: string
-  title: string
-  content: string
-  category: "Personal" | "Career Planning" | "Course Notes" | "AI Conversations"
-  tags: string[]
-  createdAt: string
-  isFavorite: boolean
-  color: string
+  id: string;
+  title: string;
+  content: string;
+  category:
+    | "Personal"
+    | "Career Planning"
+    | "Course Notes"
+    | "AI Conversations";
+  tags: string[];
+  createdAt: string;
+  isFavorite: boolean;
+  color: string;
 }
 
 const mockNotes: Note[] = [
@@ -99,60 +120,73 @@ const mockNotes: Note[] = [
     isFavorite: false,
     color: "bg-blue-50",
   },
-]
+];
 
 export default function NotesPage() {
-  const [notes, setNotes] = useState<Note[]>(mockNotes)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All Categories")
+  const [notes, setNotes] = useState<Note[]>(mockNotes);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
 
-  const categories = ["All Categories", "Personal", "Career Planning", "Course Notes", "AI Conversations"]
+  const categories = [
+    "All Categories",
+    "Personal",
+    "Career Planning",
+    "Course Notes",
+    "AI Conversations",
+  ];
 
   const filteredNotes = notes.filter((note) => {
     const matchesSearch =
       note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       note.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      note.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    const matchesCategory = selectedCategory === "All Categories" || note.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+      note.tags.some((tag) =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    const matchesCategory =
+      selectedCategory === "All Categories" ||
+      note.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const stats = {
     totalNotes: notes.length,
     favorites: notes.filter((note) => note.isFavorite).length,
-    courseNotes: notes.filter((note) => note.category === "Course Notes").length,
-    aiConversations: notes.filter((note) => note.category === "AI Conversations").length,
-  }
+    courseNotes: notes.filter((note) => note.category === "Course Notes")
+      .length,
+    aiConversations: notes.filter(
+      (note) => note.category === "AI Conversations"
+    ).length,
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case "Personal":
-        return <User className="w-4 h-4" />
+        return <User className="w-4 h-4" />;
       case "Career Planning":
-        return <Briefcase className="w-4 h-4" />
+        return <Briefcase className="w-4 h-4" />;
       case "Course Notes":
-        return <BookOpen className="w-4 h-4" />
+        return <BookOpen className="w-4 h-4" />;
       case "AI Conversations":
-        return <Bot className="w-4 h-4" />
+        return <Bot className="w-4 h-4" />;
       default:
-        return <User className="w-4 h-4" />
+        return <User className="w-4 h-4" />;
     }
-  }
+  };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "Personal":
-        return "bg-blue-100 text-blue-700"
+        return "bg-blue-100 text-blue-700";
       case "Career Planning":
-        return "bg-orange-100 text-orange-700"
+        return "bg-orange-100 text-orange-700";
       case "Course Notes":
-        return "bg-green-100 text-green-700"
+        return "bg-green-100 text-green-700";
       case "AI Conversations":
-        return "bg-purple-100 text-purple-700"
+        return "bg-purple-100 text-purple-700";
       default:
-        return "bg-gray-100 text-gray-700"
+        return "bg-gray-100 text-gray-700";
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen bg-[#f5f3f0]">
@@ -173,8 +207,12 @@ export default function NotesPage() {
                   <Edit className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold text-[#8b4513]">My Notes</h1>
-                  <p className="text-[#d4621a] text-lg">Organize your learning journey with smart notes</p>
+                  <h1 className="text-4xl font-bold text-[#8b4513]">
+                    My Notes
+                  </h1>
+                  <p className="text-[#d4621a] text-lg">
+                    Organize your learning journey with smart notes
+                  </p>
                 </div>
               </div>
               <Button className="bg-[#d4621a] hover:bg-[#b8541a] text-white px-6 py-3 text-base">
@@ -202,7 +240,10 @@ export default function NotesPage() {
                 />
               </div>
               <div className="flex gap-4 items-center">
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <Select
+                  value={selectedCategory}
+                  onValueChange={setSelectedCategory}
+                >
                   <SelectTrigger className="w-48 h-12 border-[#e5e1dc] focus:border-[#d4621a] bg-white">
                     <SelectValue />
                   </SelectTrigger>
@@ -234,26 +275,36 @@ export default function NotesPage() {
           >
             <Card className="bg-white border-[#e5e1dc] shadow-sm">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-[#8b4513] mb-1">{stats.totalNotes}</div>
+                <div className="text-3xl font-bold text-[#8b4513] mb-1">
+                  {stats.totalNotes}
+                </div>
                 <div className="text-[#d4621a] font-medium">Total Notes</div>
               </CardContent>
             </Card>
             <Card className="bg-white border-[#e5e1dc] shadow-sm">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-[#8b4513] mb-1">{stats.favorites}</div>
+                <div className="text-3xl font-bold text-[#8b4513] mb-1">
+                  {stats.favorites}
+                </div>
                 <div className="text-[#d4621a] font-medium">Favorites</div>
               </CardContent>
             </Card>
             <Card className="bg-white border-[#e5e1dc] shadow-sm">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-[#8b4513] mb-1">{stats.courseNotes}</div>
+                <div className="text-3xl font-bold text-[#8b4513] mb-1">
+                  {stats.courseNotes}
+                </div>
                 <div className="text-[#d4621a] font-medium">Course Notes</div>
               </CardContent>
             </Card>
             <Card className="bg-white border-[#e5e1dc] shadow-sm">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-[#8b4513] mb-1">{stats.aiConversations}</div>
-                <div className="text-[#d4621a] font-medium">AI Conversations</div>
+                <div className="text-3xl font-bold text-[#8b4513] mb-1">
+                  {stats.aiConversations}
+                </div>
+                <div className="text-[#d4621a] font-medium">
+                  AI Conversations
+                </div>
               </CardContent>
             </Card>
           </motion.div>
@@ -273,7 +324,9 @@ export default function NotesPage() {
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between mb-3">
                       <div
-                        className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(note.category)}`}
+                        className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(
+                          note.category
+                        )}`}
                       >
                         {getCategoryIcon(note.category)}
                         {note.category}
@@ -295,10 +348,14 @@ export default function NotesPage() {
                         </Button>
                       </div>
                     </div>
-                    <CardTitle className="text-lg text-[#8b4513] leading-tight line-clamp-2">{note.title}</CardTitle>
+                    <CardTitle className="text-lg text-[#8b4513] leading-tight line-clamp-2">
+                      {note.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <p className="text-[#6b5b73] text-sm leading-relaxed line-clamp-4 mb-4">{note.content}</p>
+                    <p className="text-[#6b5b73] text-sm leading-relaxed line-clamp-4 mb-4">
+                      {note.content}
+                    </p>
 
                     {note.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-4">
@@ -320,13 +377,23 @@ export default function NotesPage() {
                         {note.createdAt}
                       </div>
                       <div className="flex gap-1">
-                        <Button variant="ghost" size="sm" className="p-1 h-auto">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1 h-auto"
+                        >
                           <Edit className="w-4 h-4 text-[#d4621a]" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="p-1 h-auto">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1 h-auto"
+                        >
                           <Trash2 className="w-4 h-4 text-[#8b4513]" />
                         </Button>
-                        {note.isFavorite && <Heart className="w-4 h-4 text-red-500 fill-current" />}
+                        {note.isFavorite && (
+                          <Heart className="w-4 h-4 text-red-500 fill-current" />
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -337,5 +404,5 @@ export default function NotesPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
