@@ -1,35 +1,50 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Sidebar } from "@/components/sidebar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, BookOpen, Play, Clock, Star, Users, ChevronRight, Bot, User, Sparkles } from "lucide-react"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Sidebar } from "@/components/sidebar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Send,
+  BookOpen,
+  Play,
+  Clock,
+  Star,
+  Users,
+  Bot,
+  User,
+  Sparkles,
+  Search,
+  Award,
+  Target,
+  TrendingUp,
+  File as Fire,
+} from "lucide-react";
 
 interface ChatMessage {
-  id: string
-  content: string
-  sender: "user" | "assistant"
-  timestamp: Date
+  id: string;
+  content: string;
+  sender: "user" | "assistant";
+  timestamp: Date;
 }
 
 interface Course {
-  id: string
-  title: string
-  description: string
-  duration: string
-  level: string
-  rating: number
-  students: number
-  thumbnail: string
-  progress?: number
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  level: string;
+  rating: number;
+  students: number;
+  thumbnail: string;
+  progress?: number;
 }
 
 const mockCourses: Course[] = [
@@ -68,14 +83,15 @@ const mockCourses: Course[] = [
   {
     id: "4",
     title: "Networking for Success",
-    description: "Build meaningful professional relationships and expand your network",
+    description:
+      "Build meaningful professional relationships and expand your network",
     duration: "2.5 hours",
     level: "Beginner",
     rating: 4.6,
     students: 950,
     thumbnail: "/networking-course.jpg",
   },
-]
+];
 
 const initialMessages: ChatMessage[] = [
   {
@@ -85,149 +101,326 @@ const initialMessages: ChatMessage[] = [
     sender: "assistant",
     timestamp: new Date(),
   },
-]
+];
 
 export default function LearnPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages)
-  const [inputMessage, setInputMessage] = useState("")
-  const [isTyping, setIsTyping] = useState(false)
+  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+  const [inputMessage, setInputMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredCourses = mockCourses.filter(
+    (course) =>
+      course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.level.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const sendMessage = async () => {
-    if (!inputMessage.trim()) return
+    if (!inputMessage.trim()) return;
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       content: inputMessage,
       sender: "user",
       timestamp: new Date(),
-    }
+    };
 
-    setMessages((prev) => [...prev, userMessage])
-    setInputMessage("")
-    setIsTyping(true)
+    setMessages((prev) => [...prev, userMessage]);
+    setInputMessage("");
+    setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const responses = [
-        "That's a great question! Based on your interests, I'd recommend exploring the courses in our learning library. The 'Introduction to Career Planning' course would be a perfect starting point.",
-        "I can help you with that! Let me suggest some resources that align with your career goals. Have you considered taking our 'Resume Writing Masterclass'?",
-        "Excellent! Career development is a journey, and I'm here to guide you every step of the way. What specific area would you like to focus on first?",
-        "That's wonderful to hear! Based on your profile, I think you'd benefit from our 'Interview Skills Workshop'. It's designed to help you feel confident in any interview situation.",
-      ]
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: inputMessage }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get response");
+      }
+
+      const data = await response.json();
 
       const assistantMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: responses[Math.floor(Math.random() * responses.length)],
+        content: data.message,
         sender: "assistant",
         timestamp: new Date(),
-      }
+      };
 
-      setMessages((prev) => [...prev, assistantMessage])
-      setIsTyping(false)
-    }, 1500)
-  }
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        content:
+          "I'm sorry, I'm having trouble responding right now. Please try again later.",
+        sender: "assistant",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
+      e.preventDefault();
+      sendMessage();
     }
-  }
+  };
 
   const getLevelColor = (level: string) => {
     switch (level.toLowerCase()) {
       case "beginner":
-        return "bg-green-100 text-green-700"
+        return "bg-green-100 text-green-700";
       case "intermediate":
-        return "bg-yellow-100 text-yellow-700"
+        return "bg-yellow-100 text-yellow-700";
       case "advanced":
-        return "bg-red-100 text-red-700"
+        return "bg-red-100 text-red-700";
       default:
-        return "bg-gray-100 text-gray-700"
+        return "bg-gray-100 text-gray-700";
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen bg-[#f5f3f0]">
       <Sidebar />
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-8 text-center"
+            className="mb-8"
           >
-            <h1 className="text-4xl font-bold text-[#8b4513] mb-4">Learn & Grow</h1>
-            <p className="text-[#d4621a] text-lg">Enhance your skills with our curated courses and AI assistant</p>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h1 className="text-3xl font-bold text-[#8b4513] mb-2">
+                  Learn & Grow
+                </h1>
+                <p className="text-[#a0826d]">
+                  Discover courses tailored to your career journey
+                </p>
+              </div>
+
+              {/* Search Bar */}
+              <div className="relative w-96">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#a0826d] w-5 h-5" />
+                <Input
+                  placeholder="Search a course..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 border-[#e5e1dc] focus:border-[#d4621a] bg-white"
+                />
+              </div>
+            </div>
           </motion.div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Courses Section */}
-            <div className="lg:col-span-2">
+          <div className="grid lg:grid-cols-4 gap-6">
+            {/* Main Content */}
+            <div className="lg:col-span-3 space-y-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="mb-8"
+              >
+                <Card className="bg-gradient-to-r from-[#d4621a] to-[#b8541a] text-white border-none overflow-hidden relative">
+                  <div className="absolute inset-0 bg-black/10"></div>
+                  <CardContent className="p-8 relative z-10">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h2 className="text-3xl font-bold mb-3">
+                          Ready to keep learning?
+                        </h2>
+                        <p className="text-white/90 mb-6 text-lg">
+                          Let's keep your learning journey going. You're just
+                          one step closer to your goals.
+                        </p>
+                        <div className="flex gap-4">
+                          <Button
+                            variant="secondary"
+                            className="bg-white text-[#8b4513] hover:bg-white/90 font-semibold"
+                          >
+                            Resume Last Course
+                          </Button>
+                          <Button
+                            variant="outline"
+                            className="border-white text-white hover:bg-white hover:text-[#8b4513] bg-transparent"
+                          >
+                            Explore New Courses
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Decorative Icons */}
+                      <div className="hidden md:flex items-center space-x-4 opacity-20">
+                        <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                          <BookOpen className="w-8 h-8" />
+                        </div>
+                        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                          <Target className="w-6 h-6" />
+                        </div>
+                        <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+                          <Award className="w-7 h-7" />
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="grid grid-cols-2 md:grid-cols-4 gap-4"
+              >
+                <Card className="bg-white border-[#e5e1dc] text-center p-4">
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                    <BookOpen className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-[#8b4513]">3</div>
+                  <div className="text-sm text-[#a0826d]">
+                    Courses Completed
+                  </div>
+                </Card>
+
+                <Card className="bg-white border-[#e5e1dc] text-center p-4">
+                  <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                    <Award className="w-4 h-4 text-orange-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-[#8b4513]">2</div>
+                  <div className="text-sm text-[#a0826d]">
+                    Certificates Earned
+                  </div>
+                </Card>
+
+                <Card className="bg-white border-[#e5e1dc] text-center p-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                    <Clock className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-[#8b4513]">18.5</div>
+                  <div className="text-sm text-[#a0826d]">Hours Learned</div>
+                </Card>
+
+                <Card className="bg-white border-[#e5e1dc] text-center p-4">
+                  <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                    <TrendingUp className="w-4 h-4 text-red-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-[#8b4513]">3</div>
+                  <div className="text-sm text-[#a0826d]">Streak (Days)</div>
+                </Card>
+              </motion.div>
+
+              {/* Continue Learning Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
               >
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-[#8b4513] flex items-center">
-                    <BookOpen className="w-6 h-6 mr-2" />
-                    Featured Courses
+                  <h2 className="text-2xl font-bold text-[#8b4513]">
+                    Continue Learning
                   </h2>
                   <Button
-                    variant="outline"
-                    className="border-[#d4621a] text-[#d4621a] hover:bg-[#d4621a] hover:text-white bg-transparent"
+                    variant="ghost"
+                    className="text-[#d4621a] hover:text-[#b8541a]"
                   >
-                    View All Courses
-                    <ChevronRight className="w-4 h-4 ml-2" />
+                    See All
                   </Button>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  {mockCourses.map((course, index) => (
+                <Card className="bg-white border-[#e5e1dc] p-6">
+                  <div className="flex items-center gap-6">
+                    <img
+                      src="/person-learning-python-programming.jpg"
+                      alt="Course thumbnail"
+                      className="w-48 h-28 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <Badge className="bg-[#d4621a]/10 text-[#d4621a] mb-2">
+                        CODING
+                      </Badge>
+                      <h3 className="text-xl font-bold text-[#8b4513] mb-2">
+                        Mastering Python Basics
+                      </h3>
+                      <p className="text-[#a0826d] mb-3">
+                        Next Module: Functions & Modules
+                      </p>
+                      <div className="w-full bg-[#e5e1dc] rounded-full h-2 mb-4">
+                        <div
+                          className="bg-[#d4621a] h-2 rounded-full"
+                          style={{ width: "65%" }}
+                        ></div>
+                      </div>
+                      <Button className="bg-[#d4621a] hover:bg-[#b8541a] text-white">
+                        Resume Course
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+
+              {/* For You Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-[#8b4513]">For You</h2>
+                  <Button
+                    variant="ghost"
+                    className="text-[#d4621a] hover:text-[#b8541a]"
+                  >
+                    See All
+                  </Button>
+                </div>
+
+                <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredCourses.slice(0, 6).map((course, index) => (
                     <motion.div
                       key={course.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: index * 0.1 }}
+                      whileHover={{ y: -5 }}
+                      className="group"
                     >
-                      <Card className="bg-white border-[#e5e1dc] hover:shadow-lg transition-all duration-300 h-full">
+                      <Card className="bg-white border-[#e5e1dc] hover:shadow-xl transition-all duration-300 overflow-hidden">
                         <div className="relative">
                           <img
-                            src={course.thumbnail || "/placeholder.svg"}
+                            src={
+                              course.thumbnail ||
+                              `/placeholder.svg?height=200&width=300&query=${course.title}`
+                            }
                             alt={course.title}
-                            className="w-full h-48 object-cover rounded-t-lg"
+                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                           />
-                          {course.progress && (
-                            <div className="absolute bottom-2 left-2 right-2">
-                              <div className="bg-black/50 rounded-full p-2">
-                                <div className="flex items-center justify-between text-white text-xs mb-1">
-                                  <span>Progress</span>
-                                  <span>{course.progress}%</span>
-                                </div>
-                                <div className="w-full bg-white/20 rounded-full h-1">
-                                  <div
-                                    className="bg-white h-1 rounded-full transition-all duration-300"
-                                    style={{ width: `${course.progress}%` }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-3">
-                            <h3 className="text-lg font-bold text-[#8b4513] leading-tight">{course.title}</h3>
-                            <Badge className={`${getLevelColor(course.level)} text-xs font-medium ml-2`}>
-                              {course.level}
+                          <div className="absolute top-3 left-3">
+                            <Badge
+                              className={`${getLevelColor(
+                                course.level
+                              )} text-xs font-medium`}
+                            >
+                              {course.level.toUpperCase()}
                             </Badge>
                           </div>
-
-                          <p className="text-[#6b5b73] text-sm leading-relaxed mb-4">{course.description}</p>
+                        </div>
+                        <CardContent className="p-6">
+                          <h3 className="text-lg font-bold text-[#8b4513] mb-2 group-hover:text-[#d4621a] transition-colors">
+                            {course.title}
+                          </h3>
+                          <p className="text-[#6b5b73] text-sm mb-4 line-clamp-2">
+                            {course.description}
+                          </p>
 
                           <div className="flex items-center justify-between text-sm text-[#a0826d] mb-4">
                             <div className="flex items-center">
@@ -236,18 +429,23 @@ export default function LearnPage() {
                             </div>
                             <div className="flex items-center">
                               <Star className="w-4 h-4 mr-1 text-yellow-500" />
-                              <span className="font-medium">{course.rating}</span>
-                            </div>
-                            <div className="flex items-center">
-                              <Users className="w-4 h-4 mr-1" />
-                              <span>{course.students.toLocaleString()}</span>
+                              <span>{course.rating}</span>
                             </div>
                           </div>
 
-                          <Button className="w-full bg-[#d4621a] hover:bg-[#b8541a] text-white">
-                            <Play className="w-4 h-4 mr-2" />
-                            {course.progress ? "Continue Learning" : "Start Course"}
-                          </Button>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center text-sm text-[#a0826d]">
+                              <Users className="w-4 h-4 mr-1" />
+                              <span>{course.students.toLocaleString()}</span>
+                            </div>
+                            <Button
+                              size="sm"
+                              className="bg-[#d4621a] hover:bg-[#b8541a] text-white"
+                            >
+                              <Play className="w-4 h-4 mr-1" />
+                              Start
+                            </Button>
+                          </div>
                         </CardContent>
                       </Card>
                     </motion.div>
@@ -256,20 +454,48 @@ export default function LearnPage() {
               </motion.div>
             </div>
 
-            {/* AI Chat Assistant */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 space-y-6">
+              {/* Motivation Card */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <Card className="bg-white border-[#e5e1dc] shadow-lg h-[600px] flex flex-col">
+                <Card className="bg-gradient-to-br from-[#d4621a] to-[#b8541a] text-white border-none">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Fire className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">
+                      You're on fire, Learner! 🔥
+                    </h3>
+                    <p className="text-white/90 text-sm mb-4">
+                      You've learned for 3 days in a row. Keep the momentum
+                      going!
+                    </p>
+                    <Button
+                      variant="secondary"
+                      className="bg-white text-[#8b4513] hover:bg-white/90 w-full"
+                    >
+                      Start Learning
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* AI Chat Assistant */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <Card className="bg-white border-[#e5e1dc] shadow-lg h-[500px] flex flex-col">
                   <CardHeader className="pb-4 border-b border-[#e5e1dc]">
-                    <CardTitle className="text-xl text-[#8b4513] flex items-center">
+                    <CardTitle className="text-lg text-[#8b4513] flex items-center">
                       <div className="w-8 h-8 bg-gradient-to-r from-[#d4621a] to-[#b8541a] rounded-full flex items-center justify-center mr-3">
-                        <Bot className="w-5 h-5 text-white" />
+                        <Bot className="w-4 h-4 text-white" />
                       </div>
-                      AI Career Assistant
+                      AI Assistant
                       <Sparkles className="w-4 h-4 ml-2 text-[#d4621a]" />
                     </CardTitle>
                   </CardHeader>
@@ -282,10 +508,12 @@ export default function LearnPage() {
                           <div
                             key={message.id}
                             className={`flex items-start gap-3 ${
-                              message.sender === "user" ? "flex-row-reverse" : "flex-row"
+                              message.sender === "user"
+                                ? "flex-row-reverse"
+                                : "flex-row"
                             }`}
                           >
-                            <Avatar className="w-8 h-8 flex-shrink-0">
+                            <Avatar className="w-7 h-7 flex-shrink-0">
                               {message.sender === "assistant" ? (
                                 <div className="w-full h-full bg-gradient-to-r from-[#d4621a] to-[#b8541a] rounded-full flex items-center justify-center">
                                   <Bot className="w-4 h-4 text-white" />
@@ -293,27 +521,29 @@ export default function LearnPage() {
                               ) : (
                                 <>
                                   <AvatarImage src="/placeholder.svg" />
-                                  <AvatarFallback className="bg-[#8b4513] text-white">
-                                    <User className="w-4 h-4" />
+                                  <AvatarFallback className="bg-[#8b4513] text-white text-xs">
+                                    <User className="w-3 h-3" />
                                   </AvatarFallback>
                                 </>
                               )}
                             </Avatar>
                             <div
-                              className={`max-w-[80%] rounded-lg p-3 ${
+                              className={`max-w-[80%] rounded-lg p-3 text-sm ${
                                 message.sender === "user"
                                   ? "bg-[#d4621a] text-white"
                                   : "bg-[#f5f3f0] text-[#6b5b73] border border-[#e5e1dc]"
                               }`}
                             >
-                              <p className="text-sm leading-relaxed">{message.content}</p>
+                              <p className="leading-relaxed">
+                                {message.content}
+                              </p>
                             </div>
                           </div>
                         ))}
 
                         {isTyping && (
                           <div className="flex items-start gap-3">
-                            <Avatar className="w-8 h-8 flex-shrink-0">
+                            <Avatar className="w-7 h-7 flex-shrink-0">
                               <div className="w-full h-full bg-gradient-to-r from-[#d4621a] to-[#b8541a] rounded-full flex items-center justify-center">
                                 <Bot className="w-4 h-4 text-white" />
                               </div>
@@ -340,16 +570,17 @@ export default function LearnPage() {
                     <div className="p-4 border-t border-[#e5e1dc]">
                       <div className="flex gap-2">
                         <Input
-                          placeholder="Ask me anything about your career..."
+                          placeholder="Ask me anything..."
                           value={inputMessage}
                           onChange={(e) => setInputMessage(e.target.value)}
                           onKeyPress={handleKeyPress}
-                          className="flex-1 border-[#e5e1dc] focus:border-[#d4621a]"
+                          className="flex-1 border-[#e5e1dc] focus:border-[#d4621a] text-sm"
                         />
                         <Button
                           onClick={sendMessage}
                           disabled={!inputMessage.trim() || isTyping}
-                          className="bg-[#d4621a] hover:bg-[#b8541a] text-white px-4"
+                          size="sm"
+                          className="bg-[#d4621a] hover:bg-[#b8541a] text-white px-3"
                         >
                           <Send className="w-4 h-4" />
                         </Button>
@@ -363,5 +594,5 @@ export default function LearnPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
