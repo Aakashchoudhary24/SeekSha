@@ -282,40 +282,49 @@ export default function LearnPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="grid grid-cols-2 md:grid-cols-4 gap-4"
               >
-                <Card className="bg-white border-[#e5e1dc] text-center p-4">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <Card className="bg-white border-none p-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center gap-3 min-w-0">
+                  <div className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center">
                     <BookOpen className="w-4 h-4 text-blue-600" />
                   </div>
-                  <div className="text-2xl font-bold text-[#8b4513]">3</div>
-                  <div className="text-sm text-[#a0826d]">
-                    Courses Completed
-                  </div>
+                  <span className="text-lg font-bold text-[#8b4513] leading-tight">
+                    3
+                  </span>
+                  <span className="text-xs text-[#a0826d] font-medium truncate">
+                    Courses
+                  </span>
                 </Card>
-
-                <Card className="bg-white border-[#e5e1dc] text-center p-4">
-                  <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <Card className="bg-white border-none p-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center gap-3 min-w-0">
+                  <div className="w-7 h-7 bg-orange-100 rounded-lg flex items-center justify-center">
                     <Award className="w-4 h-4 text-orange-600" />
                   </div>
-                  <div className="text-2xl font-bold text-[#8b4513]">2</div>
-                  <div className="text-sm text-[#a0826d]">
-                    Certificates Earned
-                  </div>
+                  <span className="text-lg font-bold text-[#8b4513] leading-tight">
+                    2
+                  </span>
+                  <span className="text-xs text-[#a0826d] font-medium truncate">
+                    Certificates
+                  </span>
                 </Card>
-
-                <Card className="bg-white border-[#e5e1dc] text-center p-4">
-                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <Card className="bg-white border-none p-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center gap-3 min-w-0">
+                  <div className="w-7 h-7 bg-green-100 rounded-lg flex items-center justify-center">
                     <Clock className="w-4 h-4 text-green-600" />
                   </div>
-                  <div className="text-2xl font-bold text-[#8b4513]">18.5</div>
-                  <div className="text-sm text-[#a0826d]">Hours Learned</div>
+                  <span className="text-lg font-bold text-[#8b4513] leading-tight">
+                    18.5
+                  </span>
+                  <span className="text-xs text-[#a0826d] font-medium truncate">
+                    Hours
+                  </span>
                 </Card>
-
-                <Card className="bg-white border-[#e5e1dc] text-center p-4">
-                  <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <Card className="bg-white border-none p-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center gap-3 min-w-0">
+                  <div className="w-7 h-7 bg-red-100 rounded-lg flex items-center justify-center">
                     <TrendingUp className="w-4 h-4 text-red-600" />
                   </div>
-                  <div className="text-2xl font-bold text-[#8b4513]">3</div>
-                  <div className="text-sm text-[#a0826d]">Streak (Days)</div>
+                  <span className="text-lg font-bold text-[#8b4513] leading-tight">
+                    3
+                  </span>
+                  <span className="text-xs text-[#a0826d] font-medium truncate">
+                    Streak
+                  </span>
                 </Card>
               </motion.div>
 
@@ -455,33 +464,20 @@ export default function LearnPage() {
             </div>
 
             <div className="lg:col-span-1 space-y-6">
-              {/* Motivation Card */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <Card className="bg-gradient-to-br from-[#d4621a] to-[#b8541a] text-white border-none">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Fire className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-2">
-                      You're on fire, Learner! 🔥
-                    </h3>
-                    <p className="text-white/90 text-sm mb-4">
-                      You've learned for 3 days in a row. Keep the momentum
-                      going!
-                    </p>
-                    <Button
-                      variant="secondary"
-                      className="bg-white text-[#8b4513] hover:bg-white/90 w-full"
-                    >
-                      Start Learning
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
+              {/* Learning Boy Graphic */}
+              <div className="flex flex-col items-center justify-center pt-2 pb-3 -mt-4">
+                <img
+                  src="/learning-boy.jpg"
+                  alt="Learning Boy"
+                  className="w-64 h-64 object-contain rounded-xl"
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto",
+                    background: "#f5f3f0",
+                    borderRadius: "1rem",
+                  }}
+                />
+              </div>
 
               {/* AI Chat Assistant */}
               <motion.div
