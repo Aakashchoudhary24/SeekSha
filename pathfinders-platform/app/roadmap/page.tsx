@@ -1,44 +1,35 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Sidebar } from "@/components/sidebar";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import {
-  Clock,
-  Star,
-  Award,
-  ExternalLink,
-  CheckCircle,
-  Circle,
-  Trophy,
-} from "lucide-react";
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { Sidebar } from "@/components/sidebar"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Clock, Star, Award, ExternalLink, CheckCircle, Circle, Trophy } from "lucide-react"
 
 interface RoadmapItem {
-  id: string;
-  title: string;
-  description: string;
-  category: "skill" | "education" | "experience" | "certification" | "project";
-  priority: "High Priority" | "Medium Priority" | "Low Priority";
-  duration: string;
-  points: number;
-  isCompleted: boolean;
+  id: string
+  title: string
+  description: string
+  category: "skill" | "education" | "experience" | "certification" | "project"
+  priority: "High Priority" | "Medium Priority" | "Low Priority"
+  duration: string
+  points: number
+  isCompleted: boolean
   resources: Array<{
-    title: string;
-    type: "course" | "book" | "tutorial" | "practice";
-    url: string;
-  }>;
+    title: string
+    type: "course" | "book" | "tutorial" | "practice"
+    url: string
+  }>
 }
 
 const mockRoadmapItems: RoadmapItem[] = [
   {
     id: "1",
     title: "Learn Python Programming",
-    description:
-      "Master Python programming language for web development, data science, and automation",
+    description: "Master Python programming language for web development, data science, and automation",
     category: "skill",
     priority: "High Priority",
     duration: "3 months",
@@ -60,8 +51,7 @@ const mockRoadmapItems: RoadmapItem[] = [
   {
     id: "2",
     title: "Build Portfolio Projects",
-    description:
-      "Create 3-5 projects showcasing your skills in web development and programming",
+    description: "Create 3-5 projects showcasing your skills in web development and programming",
     category: "project",
     priority: "High Priority",
     duration: "6 months",
@@ -83,8 +73,7 @@ const mockRoadmapItems: RoadmapItem[] = [
   {
     id: "3",
     title: "Complete Data Structures Course",
-    description:
-      "Learn fundamental data structures and algorithms for technical interviews",
+    description: "Learn fundamental data structures and algorithms for technical interviews",
     category: "education",
     priority: "Medium Priority",
     duration: "4 months",
@@ -98,95 +87,78 @@ const mockRoadmapItems: RoadmapItem[] = [
       },
     ],
   },
-];
+]
 
 const filterOptions = [
   { value: "All", label: "All", count: mockRoadmapItems.length },
   {
     value: "Education",
     label: "Education",
-    count: mockRoadmapItems.filter((item) => item.category === "education")
-      .length,
+    count: mockRoadmapItems.filter((item) => item.category === "education").length,
   },
-  {
-    value: "Skill",
-    label: "Skill",
-    count: mockRoadmapItems.filter((item) => item.category === "skill").length,
-  },
+  { value: "Skill", label: "Skill", count: mockRoadmapItems.filter((item) => item.category === "skill").length },
   {
     value: "Experience",
     label: "Experience",
-    count: mockRoadmapItems.filter((item) => item.category === "experience")
-      .length,
+    count: mockRoadmapItems.filter((item) => item.category === "experience").length,
   },
   {
     value: "Certification",
     label: "Certification",
-    count: mockRoadmapItems.filter((item) => item.category === "certification")
-      .length,
+    count: mockRoadmapItems.filter((item) => item.category === "certification").length,
   },
-  {
-    value: "Project",
-    label: "Project",
-    count: mockRoadmapItems.filter((item) => item.category === "project")
-      .length,
-  },
-];
+  { value: "Project", label: "Project", count: mockRoadmapItems.filter((item) => item.category === "project").length },
+]
 
 export default function RoadmapPage() {
-  const [selectedFilter, setSelectedFilter] = useState("All");
-  const [roadmapItems, setRoadmapItems] =
-    useState<RoadmapItem[]>(mockRoadmapItems);
+  const [selectedFilter, setSelectedFilter] = useState("All")
+  const [roadmapItems, setRoadmapItems] = useState<RoadmapItem[]>(mockRoadmapItems)
 
   const filteredItems = roadmapItems.filter((item) => {
-    if (selectedFilter === "All") return true;
-    return item.category === selectedFilter.toLowerCase();
-  });
+    if (selectedFilter === "All") return true
+    return item.category === selectedFilter.toLowerCase()
+  })
 
-  const completedItems = roadmapItems.filter((item) => item.isCompleted).length;
-  const totalItems = roadmapItems.length;
-  const progressPercentage = Math.round((completedItems / totalItems) * 100);
-  const totalPoints = roadmapItems
-    .filter((item) => item.isCompleted)
-    .reduce((sum, item) => sum + item.points, 0);
+  const completedItems = roadmapItems.filter((item) => item.isCompleted).length
+  const totalItems = roadmapItems.length
+  const progressPercentage = Math.round((completedItems / totalItems) * 100)
+  const totalPoints = roadmapItems.filter((item) => item.isCompleted).reduce((sum, item) => sum + item.points, 0)
 
   const toggleComplete = (id: string) => {
     setRoadmapItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, isCompleted: !item.isCompleted } : item
-      )
-    );
-  };
+      items.map((item) => (item.id === id ? { ...item, isCompleted: !item.isCompleted } : item)),
+    )
+  }
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "skill":
-        return "bg-blue-100 text-blue-700";
+        return "bg-blue-100 text-blue-700"
       case "education":
-        return "bg-green-100 text-green-700";
+        return "bg-green-100 text-green-700"
       case "experience":
-        return "bg-purple-100 text-purple-700";
+        return "bg-purple-100 text-purple-700"
       case "certification":
-        return "bg-yellow-100 text-yellow-700";
+        return "bg-yellow-100 text-yellow-700"
       case "project":
-        return "bg-orange-100 text-orange-700";
+        return "bg-orange-100 text-orange-700"
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-gray-100 text-gray-700"
     }
-  };
+  }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "High Priority":
-        return "bg-red-100 text-red-700";
+        return "bg-red-100 text-red-700"
       case "Medium Priority":
-        return "bg-yellow-100 text-yellow-700";
+        return "bg-yellow-100 text-yellow-700"
       case "Low Priority":
-        return "bg-green-100 text-green-700";
+        return "bg-green-100 text-green-700"
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-gray-100 text-gray-700"
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-[#f5f3f0]">
@@ -201,12 +173,8 @@ export default function RoadmapPage() {
             transition={{ duration: 0.6 }}
             className="mb-8 text-center"
           >
-            <h1 className="text-4xl font-bold text-[#8b4513] mb-4">
-              Your Career Roadmap
-            </h1>
-            <p className="text-[#d4621a] text-lg">
-              Step-by-step path to your dream career
-            </p>
+            <h1 className="text-4xl font-bold text-[#8b4513] mb-4">Your Career Roadmap</h1>
+            <p className="text-[#d4621a] text-lg">Step-by-step path to your dream career</p>
           </motion.div>
 
           {/* Progress Card */}
@@ -227,9 +195,7 @@ export default function RoadmapPage() {
                       <h3 className="text-2xl font-bold text-[#8b4513]">
                         {completedItems} of {totalItems} Completed
                       </h3>
-                      <p className="text-[#d4621a] font-medium">
-                        {progressPercentage}% Progress
-                      </p>
+                      <p className="text-[#d4621a] font-medium">{progressPercentage}% Progress</p>
                     </div>
                   </div>
                   <div className="text-right">
@@ -239,10 +205,7 @@ export default function RoadmapPage() {
                     </div>
                   </div>
                 </div>
-                <Progress
-                  value={progressPercentage}
-                  className="h-3 bg-[#f5f3f0]"
-                />
+                <Progress value={progressPercentage} className="h-3 bg-[#f5f3f0]" />
               </CardContent>
             </Card>
           </motion.div>
@@ -258,9 +221,7 @@ export default function RoadmapPage() {
               {filterOptions.map((option) => (
                 <Button
                   key={option.value}
-                  variant={
-                    selectedFilter === option.value ? "default" : "outline"
-                  }
+                  variant={selectedFilter === option.value ? "default" : "outline"}
                   onClick={() => setSelectedFilter(option.value)}
                   className={
                     selectedFilter === option.value
@@ -288,10 +249,7 @@ export default function RoadmapPage() {
                   <CardContent className="p-8">
                     <div className="flex items-start gap-6">
                       {/* Status Icon */}
-                      <button
-                        onClick={() => toggleComplete(item.id)}
-                        className="mt-1 flex-shrink-0"
-                      >
+                      <button onClick={() => toggleComplete(item.id)} className="mt-1 flex-shrink-0">
                         {item.isCompleted ? (
                           <CheckCircle className="w-8 h-8 text-green-500 fill-current" />
                         ) : (
@@ -303,31 +261,19 @@ export default function RoadmapPage() {
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <h3 className="text-2xl font-bold text-[#8b4513] mb-2">
-                              {item.title}
-                            </h3>
+                            <h3 className="text-2xl font-bold text-[#8b4513] mb-2">{item.title}</h3>
                             <div className="flex items-center gap-3 mb-3">
-                              <Badge
-                                className={`${getCategoryColor(
-                                  item.category
-                                )} text-sm font-medium`}
-                              >
+                              <Badge className={`${getCategoryColor(item.category)} text-sm font-medium`}>
                                 {item.category}
                               </Badge>
-                              <Badge
-                                className={`${getPriorityColor(
-                                  item.priority
-                                )} text-sm font-medium`}
-                              >
+                              <Badge className={`${getPriorityColor(item.priority)} text-sm font-medium`}>
                                 {item.priority}
                               </Badge>
                             </div>
                           </div>
                         </div>
 
-                        <p className="text-[#6b5b73] text-lg leading-relaxed mb-6">
-                          {item.description}
-                        </p>
+                        <p className="text-[#6b5b73] text-lg leading-relaxed mb-6">{item.description}</p>
 
                         <div className="flex items-center gap-6 mb-6">
                           <div className="flex items-center gap-2 text-[#a0826d]">
@@ -336,17 +282,13 @@ export default function RoadmapPage() {
                           </div>
                           <div className="flex items-center gap-2 text-[#d4621a]">
                             <Star className="w-5 h-5" />
-                            <span className="font-medium">
-                              {item.points} points
-                            </span>
+                            <span className="font-medium">{item.points} points</span>
                           </div>
                         </div>
 
                         {/* Resources */}
                         <div className="mb-6">
-                          <h4 className="text-lg font-semibold text-[#8b4513] mb-3">
-                            Resources:
-                          </h4>
+                          <h4 className="text-lg font-semibold text-[#8b4513] mb-3">Resources:</h4>
                           <div className="flex flex-wrap gap-3">
                             {item.resources.map((resource, idx) => (
                               <Button
@@ -390,5 +332,5 @@ export default function RoadmapPage() {
         </div>
       </main>
     </div>
-  );
+  )
 }

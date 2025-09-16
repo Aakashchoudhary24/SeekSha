@@ -75,7 +75,7 @@ export function Sidebar() {
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-[#8b4513]">PathFinders</h1>
+            <h1 className="text-lg font-bold text-[#8b4513]">Seeksha</h1>
             <p className="text-xs text-[#a0826d]">Enhanced Learning</p>
           </div>
         </div>
