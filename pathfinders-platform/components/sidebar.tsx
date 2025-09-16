@@ -19,6 +19,9 @@ import {
   Sparkles,
   Lock,
   PersonStanding,
+  Sun,
+  Volume2,
+  Languages,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -60,7 +63,7 @@ export function Sidebar() {
   }, []);
 
   return (
-    <div className="w-64 h-screen bg-[#f5f3f0] border-r border-[#e5e1dc] flex flex-col">
+    <div className="w-64 h-screen bg-[#f5f3f0] border-r border-[#e5e1dc] flex flex-col sticky top-0">
       {/* Logo Section */}
       <div className="p-6 border-b border-[#e5e1dc]">
         <div className="flex items-center space-x-3">
@@ -75,16 +78,19 @@ export function Sidebar() {
       </div>
 
       {/* Quick Actions */}
-      <div className="p-4 border-b border-[#e5e1dc]">
+      <div className="p-4 border-b border-[#e5e1dc] cen">
         <div className="flex space-x-2">
           <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
             <Home className="w-4 h-4 text-[#8b4513]" />
           </button>
           <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
-            <RefreshCw className="w-4 h-4 text-[#8b4513]" />
+            <Sun className="w-4 h-4 text-[#8b4513]" />
           </button>
           <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
-            <Brain className="w-4 h-4 text-[#8b4513]" />
+            <Volume2 className="w-4 h-4 text-[#8b4513]" />
+          </button>
+          <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
+            <Languages className="w-4 h-4 text-[#8b4513]" />
           </button>
           <button className="p-2 rounded-lg bg-[#e5e1dc] hover:bg-[#d4c5b9] transition-colors">
             <Settings className="w-4 h-4 text-[#8b4513]" />
