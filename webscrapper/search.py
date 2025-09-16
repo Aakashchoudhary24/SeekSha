@@ -8,7 +8,7 @@ Universal Exam Info Fetcher
 Note: Web pages change, so parsing may need small adjustments per exam.
 """
 
-import os
+
 import re
 import requests
 from bs4 import BeautifulSoup
