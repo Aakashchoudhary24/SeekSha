@@ -191,7 +191,40 @@ def search_youtube_videos(query: str, max_results: int = 5) -> List[Dict]:
     except Exception:
         return []
 
-
+# ---------------------------
+# YouTube search (optional) - Modified to fetch one playlist
+# ---------------------------
+def search_youtube_playlist(query: str) -> Optional[Dict]:
+    """
+    Requires google-api-python-client and a valid YOUTUBE_API_KEY set in env var or variable above.
+    Searches for one relevant playlist (e.g., "NEET preparation playlist").
+    Returns a dict: {title, playlistId, url} or None.
+    """
+    if not HAVE_YT or not YOUTUBE_API_KEY:
+        return None
+    try:
+        youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
+        request = youtube.search().list(
+            q=f"{query} preparation playlist",
+            part="snippet",
+            maxResults=1,
+            type="playlist",
+            relevanceLanguage="en"
+        )
+        resp = request.execute()
+        items = resp.get("items", [])
+        if not items:
+            return None
+        item = items[0]
+        playlist_id = item["id"]["playlistId"]
+        return {
+            "title": item["snippet"]["title"],
+            "playlistId": playlist_id,
+            "url": f"https://www.youtube.com/playlist?list={playlist_id}"
+        }
+    except Exception:
+        return None
+    
 # ---------------------------
 # Google Books suggestions
 # ---------------------------
@@ -223,7 +256,7 @@ def search_google_books(query: str, max_results: int = 6) -> List[Dict]:
 # ---------------------------
 # Putting it all together
 # ---------------------------
-def fetch_exam_info_universal(exam_query: str, include_videos: bool = True, include_books: bool = True) -> Dict:
+def fetch_exam_info_universal(exam_query: str, include_videos: bool = True, include_playlist: bool = True, include_books: bool = True) -> Dict:
     """
     Main function to fetch info for any exam name.
     Returns a structured dict with: title, summary, syllabus, pattern, videos, books, raw_sections
@@ -243,8 +276,11 @@ def fetch_exam_info_universal(exam_query: str, include_videos: bool = True, incl
     if include_videos:
         videos = search_youtube_videos(exam_query, max_results=6)
         result["videos"] = videos
-
-    # 3) Books
+    # 3) YouTube Playlist
+    if include_playlist:
+        playlist = search_youtube_playlist(exam_query)
+        result["playlist"] = playlist
+    # ) Books
     if include_books:
         books = search_google_books(exam_query, max_results=6)
         result["books"] = books
@@ -287,6 +323,13 @@ if __name__ == "__main__":
             print(f" - {v['title']}  ({v['url']})")
     else:
         print("\nYouTube results not available (no API key or google client).")
+
+    # Playlist
+    if info["playlist"]:
+        p = info["playlist"]
+        print(f"\nSuggested YouTube Playlist:\n - {p['title']} ({p['url']})")
+    else:
+        print("\nYouTube playlist not available (no API key, google client, or no results).")
 
     # Books
     if info["books"]:
