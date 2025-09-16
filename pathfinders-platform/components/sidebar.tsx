@@ -136,7 +136,7 @@ export function Sidebar() {
             >
               <Type className="w-4 h-4 text-[#8b4513]" />
             </button>
-            <div className="fixed left-32 top-20 w-40 bg-white border border-[#e5e1dc] rounded shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-auto z-[9999] transition-opacity">
+            <div className="absolute left-full top-0 ml-2 w-40 bg-white border border-[#e5e1dc] rounded shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-auto z-[9999] transition-opacity">
               <button
                 onClick={() => setTextSize("small")}
                 className={`block w-full text-left px-4 py-2 text-sm ${
