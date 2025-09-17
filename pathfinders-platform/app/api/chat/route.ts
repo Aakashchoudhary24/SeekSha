@@ -2,10 +2,10 @@ import { type NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
 
 const openai = new OpenAI({
-  apiKey: process.env.OPEN_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 })
 
-console.log("[DEBUG] OPEN_API_KEY loaded:", process.env.OPEN_API_KEY ? process.env.OPEN_API_KEY.slice(0, 6) + '...' : 'NOT FOUND')
+console.log("[DEBUG] OPENAI_API_KEY loaded:", process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.slice(0, 6) + '...' : 'NOT FOUND')
 
 export async function POST(request: NextRequest) {
   try {
